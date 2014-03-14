@@ -1,0 +1,51 @@
+{% extends 'ClientGameBundle:Games:base.html.twig' %}
+
+{% block games_content %}
+    <a href="{{ path('client_game_games_new') }}" class="btn btn-primary">New Game</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Created</th>
+                <th>Creator</th>
+                <th>teams</th>
+                <th>view</th>
+            </tr>
+        </thead>
+        {% for game in games %}
+            <tr>
+                <td>{{ game.name }}</td>
+                <td>{{ game.timestamp|date('F j, Y h:i a') }}</td>
+                <td>{{ game.owner.username }}</td>
+                <td>
+                    {% set joinedTeam = false %}
+
+                    {% set joinTeams %}
+                        {% for team in game.teams %}
+                            {% if app.user and team.hasPlayer(app.user) %}
+                                {% set joinedTeam = team %}
+                            {% elseif app.user and team.players|length < 2 %}
+                                <a href="{{ path('client_game_teams_join', {'id': team.id}) }}">Join {{ team.name }},</a>
+                            {% elseif not app.user %}
+                                {{ team.name }},
+                            {% else %}
+                                {{ team.name }} is full,
+                            {% endif %}
+                        {% endfor %}
+                    {% endset %}
+
+                    {% if joinedTeam %}
+                        You're on team: {{ joinedTeam.name }}
+                    {% else %}
+                        {{ joinTeams }}
+                    {% endif %}
+
+                    {% if app.user and game.teams|length < 2 and joinedTeam == false %}
+                        <a href="{{ path('client_game_teams_new', {'gameId': game.id}) }}">Add Team</a>
+                    {% endif %}
+                </td>
+                <td><a class="btn btn-primary" href="{{ path('client_game_games_view', {'id' : game.id}) }}">View</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

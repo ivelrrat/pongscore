@@ -1,0 +1,14 @@
+services:
+    client_bundle.gamebundle.form.gametype:
+        class: Client\Bundle\GameBundle\Form\GameType
+        tags:
+          - { name: form.type, alias: client_bundle_gamebundle_game}
+
+    client_bundle.gamebundle.form.teamtype:
+        class: Client\Bundle\GameBundle\Form\TeamType
+        tags:
+          - { name: form.type, alias: client_bundle_gamebundle_team}
+
+    client_bundle.gamebundle.thunder:
+        class: Thunder
+        arguments: [%thunder.apikey%, %thunder.apisecret%, %thunder.host%, %thunder.port%]

@@ -1,0 +1,7 @@
+{% extends 'ClientGameBundle:Teams:base.html.twig' %}
+
+{% form_theme form 'form_theme.html.twig' %}
+
+{% block teams_content %}
+    {{ form(form) }}
+{% endblock %}

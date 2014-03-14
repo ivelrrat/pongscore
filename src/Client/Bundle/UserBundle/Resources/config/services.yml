@@ -1,0 +1,5 @@
+services:
+    client_bundle.userbundle.form.registrationformtypeextension:
+        class: Client\Bundle\UserBundle\Form\RegistrationFormTypeExtension
+        tags:
+            - { name: form.type_extension, alias: fos_user_registration }

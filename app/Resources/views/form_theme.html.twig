@@ -1,0 +1,23 @@
+{% use 'form_div_layout.html.twig' %}
+
+{% block form_row %}
+    {% spaceless %}
+        <div class="form-group">
+            {{ form_errors(form) }}
+            {{ form_label(form) }}
+            {{ form_widget(form) }}
+        </div>
+    {% endspaceless %}
+{% endblock form_row %}
+
+{% block form_widget_simple %}
+{% set attr = attr|merge({'class': attr.class|default('') ~ 'form-control'}) %}
+{{ parent() }}
+{% endblock  %}
+
+{% block button_widget %}
+{% spaceless %}
+    {% set attr = attr|merge({'class': attr.class|default('') ~ 'btn btn-primary'}) %}
+    {{ parent() }}
+{% endspaceless %}
+{% endblock button_widget %}

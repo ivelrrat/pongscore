@@ -1,0 +1,29 @@
+Client\Bundle\UserBundle\Entity\User:
+    properties:
+        username:
+            - NotBlank:
+                message: fos_user.username.blank
+                groups: [Client_Registration]
+            - Length:
+                min: 2
+                minMessage: fos_user.username.short
+                max: 255
+                maxMessage: fos_user.username.long
+                groups: [Client_Registration]
+
+        plainPassword:
+            - NotBlank:
+                message: fos_user.password.blank
+                groups: [Client_Registration]
+            - Length:
+                min: 2
+                max: 4096
+                minMessage: fos_user.password.short
+                groups: [Client_Registration]
+
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: usernameCanonical
+            errorPath: username
+            message: fos_user.username.already_used
+            groups: [Client_Registration]

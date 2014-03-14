@@ -1,0 +1,14 @@
+client_game_default:
+    resource: "@ClientGameBundle/Controller/DefaultController.php"
+    type:     annotation
+    prefix:   /
+
+client_game_games:
+    resource: "@ClientGameBundle/Controller/GamesController.php"
+    type:     annotation
+    prefix:   /games
+
+client_game_teams:
+    resource: "@ClientGameBundle/Controller/TeamsController.php"
+    type:     annotation
+    prefix:   /teams

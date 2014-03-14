@@ -1,0 +1,57 @@
+{% extends 'ClientGameBundle:Games:base.html.twig' %}
+
+{% block games_content %}
+    <div class="row">
+        {% for team in game.teams %}
+            <div class="col-sm-6">
+                <h1>Team {{ team.name }}</h1>
+                <ul>
+                    {% for player in team.players %}
+                        <li>{{ player.username }}</li>
+                    {% endfor %}
+                </ul>
+                <a href="{{ path('client_game_teams_point', {'id' : team.id}) }}" class="btn btn-success btn-lg btn-block add-point" data-team="{{ team.id }}">{{ team.points|length }}</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+<script src="/bundles/clientgame/js/thunderpush.js"></script>
+<script>
+    var current_user = "{{ app.user.username|default('spectator') }}";
+    $(function(){
+
+        Thunder.connect("levi-mini.limelyte.com:8080", "1234", ["teams"], { 'user': current_user});
+        Thunder.listen(
+            function(message)
+            {
+                try {
+                    var obj = $.parseJSON(message);
+                    if (typeof obj.team != 'undefined') {
+                        $('[data-team="'+ obj.team +'"]').text(obj.points);
+                    }
+                } catch (error) {
+
+                }
+
+            }
+        );
+
+
+        $('.add-point').on('click', function(event){
+            event.preventDefault();
+            var url = $(this).attr('href');
+            var $this = $(this);
+            $.get(url, null, function(data){
+                console.log(data);
+
+                if (data == 'ok') {
+//                    $this.text(parseInt($this.text()) + 1);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

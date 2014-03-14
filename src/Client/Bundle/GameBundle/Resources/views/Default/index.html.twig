@@ -1,0 +1,29 @@
+{% extends 'ClientGameBundle::base.html.twig' %}
+
+{% block body %}
+    <div class="jumbotron">
+        <div class="container">
+            <h1>Pong Score!</h1>
+            <p>ping pong score keeper</p>
+            <p>
+                <a class="btn btn-primary btn-lg" role="button" href="{{ path('fos_user_registration_register') }}">Create an Account</a>
+                <a class="btn btn-primary btn-lg" role="button" href="{{ path('client_game_games_index') }}">View Games</a>
+            </p>
+        </div>
+    </div>
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-5">
+            {% if app.user %}
+                <h2>Welcome back {{ app.user.username }}. <a class="btn btn-primary" href="{{ path('fos_user_security_logout') }}">Logout</a></h2>
+            {% else %}
+                {% block fos_user_content %}
+                    {{ render(url('fos_user_security_login') ~ "?partial=1") }}
+                {% endblock %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

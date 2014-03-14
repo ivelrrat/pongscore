@@ -1,0 +1,5 @@
+client_game:
+    resource: "@ClientGameBundle/Resources/config/routing.yml"
+
+client_user:
+    resource: "@ClientUserBundle/Resources/config/routing.yml"
