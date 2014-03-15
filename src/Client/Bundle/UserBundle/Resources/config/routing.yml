@@ -1,7 +1,7 @@
 client_user_default:
     resource: "@ClientUserBundle/Controller/DefaultController.php"
     type:     annotation
-    prefix:   /
+    prefix:   /user
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"

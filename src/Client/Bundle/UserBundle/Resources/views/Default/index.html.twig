@@ -1,1 +1,31 @@
 {% extends 'ClientUserBundle::base.html.twig' %}
+
+{% block user_content %}
+    <table class="table">
+        <thead><tr><td>UserName</td></tr></thead>
+        <tr>
+            <td>{{ app.user.getUserName() }}</td>
+        </tr>
+    </table>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <td>Teams</td>
+            <td>Teammates</td>
+            <td><a href="{{ path('client_game_teams_new') }}" class="btn btn-primary">Add Team</a></td>
+        </tr>
+        </thead>
+        {% for team in app.user.getTeams() %}
+            <tr>
+                <td>{{ team.getName() }}</td>
+                <td>
+                    {% for player in team.getPlayers() %}
+                        {{ player.getUserName() }}{{ not loop.last ? ', ' }}
+                    {% endfor %}
+                </td>
+                <td><a href="{{ path('client_game_teams_view', {'id': team.getId()}) }}">View</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

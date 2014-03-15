@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TeamsController extends Controller
 {
     /**
-     * @Route("/new/{gameId}")
+     * @Route("/new/{gameId}", defaults={"gameId" = ""})
      * @Template()
      */
     public function newAction(Request $request, $gameId)
@@ -24,23 +24,40 @@ class TeamsController extends Controller
         $form->add('submit', 'submit');
 
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
-            /** @var GameRepository $gameRepository */
-            $gameRepository = $this->getDoctrine()->getManager()->getRepository('ClientGameBundle:Game');
-            $gameEntity = $gameRepository->find($gameId);
-
             $teamEntity = $form->getData();
             $teamEntity->addPlayer($this->getUser());
-
-            $gameEntity->addTeam($teamEntity);
-            $this->getDoctrine()->getManager()->persist($gameEntity);
             $this->getDoctrine()->getManager()->persist($teamEntity);
+
+            if ($gameId) {
+                /** @var GameRepository $gameRepository */
+                $gameRepository = $this->getDoctrine()->getManager()->getRepository('ClientGameBundle:Game');
+                $gameEntity = $gameRepository->find($gameId);
+                $gameEntity->addTeam($teamEntity);
+                $this->getDoctrine()->getManager()->persist($gameEntity);
+            }
+
             $this->getDoctrine()->getManager()->flush();
 
-            return new RedirectResponse($this->generateUrl('client_game_games_index'));
+            return new RedirectResponse($this->generateUrl('client_game_teams_view'));
         }
 
         return array(
             'form'  => $form->createView(),
+        );
+    }
+
+    /**
+     * @Route("/view/{id}")
+     * @Template()
+     * @param Request $request
+     * @param $id
+     */
+    public function viewAction(Request $request, $id)
+    {
+        $teamRepository = $this->getDoctrine()->getManager()->getRepository('ClientGameBundle:Team');
+        $teamEntity = $teamRepository->find($id);
+        return array(
+            'team' => $teamEntity,
         );
     }
 
